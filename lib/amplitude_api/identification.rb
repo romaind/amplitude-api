@@ -12,16 +12,20 @@ class AmplitudeAPI
     # @!attribute [ rw ] user_properties
     #   @return [ String ] the user_properties to be attached to the Amplitude Identify
     attr_accessor :user_properties
+    # @!attribute [ rw ] groups
+    #   @return [ String ] the groups to be attached to the Amplitude Identify
+    attr_accessor :groups
 
     # Create a new Identification
     #
     # @param [ String ] user_id a user_id to associate with the identification
     # @param [ String ] device_id a device_id to associate with the identification
     # @param [ Hash ] user_properties various properties to attach to the user identification
-    def initialize(user_id: "", device_id: nil, user_properties: {})
+    def initialize(user_id: "", device_id: nil, user_properties: {}, groups: [])
       self.user_id = user_id
-      self.device_id = device_id if device_id
+      self.device_id = device_id
       self.user_properties = user_properties
+      self.groups = groups
     end
 
     def user_id=(value)
@@ -39,8 +43,10 @@ class AmplitudeAPI
     def to_hash
       {
         user_id: user_id,
+        device_id: device_id,
+        groups: groups,
         user_properties: user_properties
-      }.tap { |hsh| hsh[:device_id] = device_id if device_id }
+      }.compact
     end
 
     # @return [ true, false ]
